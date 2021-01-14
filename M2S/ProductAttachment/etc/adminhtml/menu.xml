@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="M2S_ProductAttachment::parent" title="M2S" module="M2S_ProductAttachment" resource="M2S_ProductAttachment::parent" translate="title" sortOrder="900"/>
+        <add id="M2S_ProductAttachment::m2s" title="Product attachment" module="M2S_ProductAttachment" parent="M2S_ProductAttachment::parent" resource="M2S_ProductAttachment::m2s" action="m2s/attachment/index" translate="title" sortOrder="900"/>
+    </menu>
+</config>

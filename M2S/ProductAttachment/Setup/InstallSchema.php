@@ -13,7 +13,7 @@ class InstallSchema implements InstallSchemaInterface
     {
         $setup->startSetup();
 
-        $table = $setup->getConnection()->newTable('m2s_productattachment')
+        $table = $setup->getConnection()->newTable('m2s_product_attachment')
         ->addColumn(
             'id',
             Table::TYPE_INTEGER,
