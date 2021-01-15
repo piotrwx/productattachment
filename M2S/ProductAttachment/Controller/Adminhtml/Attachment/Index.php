@@ -9,6 +9,8 @@ class Index extends Action
 {
     public function execute()
     {
-        return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->getConfig()->getTitle()->prepend(__(" M2S Product Attachments"));
+        return $resultPage;
     }
 }

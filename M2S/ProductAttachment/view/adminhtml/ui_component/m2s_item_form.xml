@@ -50,10 +50,10 @@
                 <item name="label" xsi:type="string">General</item>
             </item>
         </argument>
-        <field name="product_id">
+        <field name="product_sku">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Product ID</item>
+                    <item name="label" xsi:type="string">Product SKU</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="validation" xsi:type="array">
@@ -62,11 +62,11 @@
                 </item>
             </argument>
         </field>
-        <field name="attachment_img">
+        <field name="attachment_path">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">string</item>
-                    <item name="source" xsi:type="string">attachment_img</item>
+                    <item name="source" xsi:type="string">attachment_path</item>
                     <item name="label" xsi:type="string" translate="true">Attachment file</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="formElement" xsi:type="string">fileUploader</item>

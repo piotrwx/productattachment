@@ -1,0 +1,42 @@
+@border-table-color: #d3d3d3;
+
+.attachment-list{
+    border: 1px solid @border-table-color;
+    width: 100%;
+    thead {
+        background-color: #514943;
+        color: #ffffff;
+        tr {
+            display: flex;
+            flex-wrap: wrap;
+
+            td {
+                border-right: 1px solid #ffffff;
+                &:nth-last-child{
+                    border-bottom: unset;
+                }
+            }
+        }
+    }
+    tr{
+        display: flex;
+        flex-wrap: wrap;
+        border-bottom: 1px solid @border-table-color;
+
+        &:nth-last-child{
+            border-bottom: unset;
+        }
+
+        td{
+            width: 20%;
+            min-width: 100px;
+            padding: 10px 5px;
+            border-right: 1px solid @border-table-color;
+            img {
+                max-height: 100px;
+                margin: auto;
+                display: block;
+            }
+        }
+    }
+}

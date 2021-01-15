@@ -21,30 +21,42 @@ class InstallSchema implements InstallSchemaInterface
             ['identity' => true, 'nullable' => false, 'primary' => true],
             'ID'
         )->addColumn(
-            'product_id',
-            Table::TYPE_INTEGER,
+            'product_sku',
+            Table::TYPE_TEXT,
             null,
             ['nullable' => false],
-            'Product id'
+            'Product sku'
         )->addColumn(
-            'attachment_img',
+            'attachment_path',
             Table::TYPE_TEXT,
             null,
             ['nullable' => false],
             'attachment'
         )->addColumn(
-            'status',
-            Table::TYPE_SMALLINT,
+            'attachment_type',
+            Table::TYPE_TEXT,
             null,
             ['nullable' => false],
-            '0 = disable / 1 = enable'
+            'type of attachment'
         )->addColumn(
-            'created_at',
-            Table::TYPE_TIMESTAMP,
-            null,
-            ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
-            'added at'
-        )->setComment('M2S Product Attachment');
+            'file_name',
+            Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'file name'
+        )->addColumn(
+        'status',
+        Table::TYPE_SMALLINT,
+        null,
+        ['nullable' => false],
+        '0 = disable / 1 = enable'
+    )->addColumn(
+                'created_at',
+                Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
+                'added at'
+            )->setComment('M2S Product Attachment');
         $setup->getConnection()->createTable($table);
 
         $setup->endSetup();

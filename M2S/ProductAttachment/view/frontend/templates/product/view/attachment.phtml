@@ -1,0 +1,30 @@
+<?php /** @var M2S\ProductAttachment\Block\Attachments $block **/ ?>
+
+<?php if ($block->isEnabled()): ?>
+
+    <?php if ($items = $block->getItems()): ?>
+        <h3><?php echo __('Here is available pattern:') ?></h3>
+        <ul class="attachment-list">
+            <?php foreach ($items as $item): ?>
+                <?php $type = $block->getItemByType($item); ?>
+                <?php $fileName = $item->getFileName(); ?>
+                <?php $filePath = $item->getAttachmentPath(); ?>
+
+                <?php if ($type == 'application/pdf'):?>
+                    <li><a target="_blank" href="<?php echo $filePath; ?>"> <img src="<?php echo $this->getViewFileUrl('M2S_ProductAttachment::images/pdf.png'); ?>" alt="<?php echo $fileName; ?>"/><p><?php echo $fileName; ?></p> </a></li>
+                <?php else:
+                   echo '<li><a href="' . $filePath . '"><img src="' . $filePath . '" alt=" ' . $fileName . '"/><p>' . $fileName . '</p></a></li>';
+                endif; ?>
+
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+
+    <h3><?php echo __('Add your own pattern') ?></h3>
+    <p><?php echo __('Do you have own idea? Share with us:') ?></p>
+    <form name="attachmentform" method="post" action="<?php echo $block->getAction(); ?>"  enctype="multipart/form-data">
+        <input name="attachmentfile" id="attachmentfile" type="file" required/>
+        <input class="attach button" name="attachmentsubmit" type="submit"/>
+    </form>
+
+<?php endif; ?>
