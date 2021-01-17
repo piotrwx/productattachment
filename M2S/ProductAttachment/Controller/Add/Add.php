@@ -6,11 +6,12 @@ use M2S\ProductAttachment\Controller\Add as AddController;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\ResultFactory;
 
 class Add extends AddController
 {
+    protected $_assetRepo;
+
     protected $_FILES = [];
 
     protected $productRepository;
@@ -20,11 +21,13 @@ class Add extends AddController
     private $storeManager;
 
     public function __construct(
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Action\Context $context,
         ProductRepositoryInterface $productRepository,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\MediaStorage\Model\File\UploaderFactory $_uploaderFactory
     ) {
+        $this->_assetRepo = $assetRepo;
         $this->storeManager = $storeManager;
         $this->productRepository = $productRepository;
         $this->_uploaderFactory = $_uploaderFactory;
@@ -52,10 +55,15 @@ class Add extends AddController
             $path='m2s/files';
             $result = $uploader->save('pub/media/' . $path);
             $pathToFile = $mediaUrl . $path . '/' . $result['file'];
+            $image = $pathToFile;
+            if ($result['type'] == 'application/pdf') {
+                $image = $this->_assetRepo->getUrl("M2S_ProductAttachment::images/pdf.png");
+            }
             $product = $this->productRepository->getById($productId);
             $model = $this->_objectManager->create(\M2S\ProductAttachment\Model\Item::class)
                 ->setProductSku($product->getSku())
                 ->setAttachmentPath($pathToFile)
+                ->setImage($image)
                 ->setAttachmentType($result['type'])
                 ->setFileName($result['name']);
             $model->save();
@@ -73,5 +81,4 @@ class Add extends AddController
         $resultRedirect->setUrl($this->_redirect->getRefererUrl());
         return $resultRedirect;
     }
-
 }

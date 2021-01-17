@@ -27,6 +27,11 @@ class Edit extends Action
         parent::__construct($context);
     }
 
+    public function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('M2S_ProductAttachment::parent');
+    }
+
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
@@ -56,9 +61,10 @@ class Edit extends Action
         $resultPage->addBreadcrumb($title, $title);
 
         if ($id) {
-            $resultPage->getConfig()->getTitle()->prepend('Edit');
+            $resultPage->getConfig()->getTitle()->prepend(__("Edit"));
+
         } else {
-            $resultPage->getConfig()->getTitle()->prepend('New attachment');
+            $resultPage->getConfig()->getTitle()->prepend(__("New Attachment"));
         }
 
         return $resultPage;

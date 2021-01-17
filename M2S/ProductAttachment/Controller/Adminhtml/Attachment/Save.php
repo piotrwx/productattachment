@@ -19,10 +19,44 @@ class Save extends Action
 
     public function execute()
     {
+        $request = $this->getRequest()->getPostValue()['general'];
+//
+//                var_dump($this->getRequest()->getPostValue()['general']);
+//        die();
 
-        $this->itemFactory->create()
-           ->setData($this->getRequest()->getPostValue()['general'])
-           ->save();
+        if (!isset($request['id'])) {
+            $attachmentArray = $request['attachment_path']['0'];
+            if ($attachmentArray['type'] == 'application/pdf') {
+                $request['image'] = $this->getViewFileUrl('M2S_ProductAttachment::images/pdf.png');
+            } else {
+                $request['image'] = $attachmentArray['url'];
+            }
+
+            $this->itemFactory->create()
+                ->setData(
+                    [
+
+                        'product_sku' => $request['product_sku'],
+                        'status' => $request['status'],
+                        'image' => $request['image'],
+                        'attachment_path' => $attachmentArray['url'],
+                        'attachment_type' => $attachmentArray['type'],
+                        'file_name' => $attachmentArray['name']
+                    ]
+                )
+                ->save();
+        } else {
+            $this->itemFactory->create()
+                ->setData(
+                    [
+                        'id' => $request['id'],
+                        'product_sku' => $request['product_sku'],
+                        'status' => $request['status']
+                    ]
+                )
+                ->save();
+        }
+
         return $this->resultRedirectFactory->create()->setPath('m2s/attachment/index');
     }
 }

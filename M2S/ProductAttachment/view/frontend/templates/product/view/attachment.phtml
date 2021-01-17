@@ -9,13 +9,8 @@
                 <?php $type = $block->getItemByType($item); ?>
                 <?php $fileName = $item->getFileName(); ?>
                 <?php $filePath = $item->getAttachmentPath(); ?>
-
-                <?php if ($type == 'application/pdf'):?>
-                    <li><a target="_blank" href="<?php echo $filePath; ?>"> <img src="<?php echo $this->getViewFileUrl('M2S_ProductAttachment::images/pdf.png'); ?>" alt="<?php echo $fileName; ?>"/><p><?php echo $fileName; ?></p> </a></li>
-                <?php else:
-                   echo '<li><a href="' . $filePath . '"><img src="' . $filePath . '" alt=" ' . $fileName . '"/><p>' . $fileName . '</p></a></li>';
-                endif; ?>
-
+                <?php $image = $item->getImage(); ?>
+                <?php   echo '<li><a href="' . $filePath . '"><img src="' . $image . '" alt=" ' . $fileName . '"/><p>' . $fileName . '</p></a></li>';?>
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>

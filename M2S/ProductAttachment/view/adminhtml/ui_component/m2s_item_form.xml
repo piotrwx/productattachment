@@ -17,6 +17,7 @@
             <item name="navContainerName" xsi:type="string" >left</item>
         </item>
         <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">M2S\ProductAttachment\Block\Adminhtml\Attachment\BackButton</item>
             <item name="save" xsi:type="array">
                 <item name="name" xsi:type="string" >save</item>
                 <item name="label" xsi:type="string" >Save</item>
@@ -69,9 +70,10 @@
                     <item name="source" xsi:type="string">attachment_path</item>
                     <item name="label" xsi:type="string" translate="true">Attachment file</item>
                     <item name="visible" xsi:type="boolean">true</item>
-                    <item name="formElement" xsi:type="string">fileUploader</item>
-                    <item name="required" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="number">40</item>
+                    <!-- - Remove fileUploader -->
+                    <!-- + Add imageUploader -->
+                    <item name="formElement" xsi:type="string">imageUploader</item>
+                    <item name="required" xsi:type="boolean">true</item>
                     <item name="uploaderConfig" xsi:type="array">
                         <item name="url" xsi:type="url" path="m2s/attachment/file"/>
                     </item>
