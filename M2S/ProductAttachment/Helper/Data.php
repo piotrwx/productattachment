@@ -7,6 +7,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class Data extends \Magento\Framework\Url\Helper\Data
 {
     const XML_PATH_ENABLED = 'm2s/productattachment/enabled';
+    const XML_PATH_ADD_ATTACHMENT_BY_CUSTOMER = 'm2s/productattachment/addbycustomer';
 
     protected $_product = null;
 
@@ -50,5 +51,10 @@ class Data extends \Magento\Framework\Url\Helper\Data
     public function isEnabled()
     {
         return $this->config->getValue(self::XML_PATH_ENABLED);
+    }
+
+    public function isEnabledCustomerAttachment()
+    {
+        return $this->config->getValue(self::XML_PATH_ADD_ATTACHMENT_BY_CUSTOMER);
     }
 }

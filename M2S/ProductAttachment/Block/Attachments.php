@@ -58,4 +58,9 @@ class Attachments extends Template
     {
         return $this->helperData->isEnabled();
     }
+
+    public function isEnabledCustomerAttachment()
+    {
+        return $this->helperData->isEnabledCustomerAttachment();
+    }
 }

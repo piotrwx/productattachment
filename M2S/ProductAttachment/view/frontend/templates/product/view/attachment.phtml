@@ -14,12 +14,12 @@
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
-
+    <?php if ($block->isEnabledCustomerAttachment()): ?>
     <h3><?php echo __('Add your own pattern') ?></h3>
     <p><?php echo __('Do you have own idea? Share with us:') ?></p>
     <form name="attachmentform" method="post" action="<?php echo $block->getAction(); ?>"  enctype="multipart/form-data">
         <input name="attachmentfile" id="attachmentfile" type="file" required/>
         <input class="attach button" name="attachmentsubmit" type="submit"/>
     </form>
-
+    <?php endif; ?>
 <?php endif; ?>
