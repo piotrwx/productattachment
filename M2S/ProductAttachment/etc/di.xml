@@ -13,7 +13,7 @@
             <argument name="basePath" xsi:type="string">m2s/files</argument>
             <argument name="allowedExtensions" xsi:type="array">
                 <item name="jpg" xsi:type="string">jpg</item>
-                <item name="gif" xsi:type="string">pdf</item>
+                <item name="pdf" xsi:type="string">pdf</item>
                 <item name="png" xsi:type="string">png</item>
             </argument>
         </arguments>

@@ -67,7 +67,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">string</item>
-                    <item name="source" xsi:type="string">attachment_path</item>
+                    <item name="source" xsi:type="string">ImageUploader</item>
                     <item name="label" xsi:type="string" translate="true">Attachment file</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <!-- - Remove fileUploader -->
@@ -75,7 +75,7 @@
                     <item name="formElement" xsi:type="string">imageUploader</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="uploaderConfig" xsi:type="array">
-                        <item name="url" xsi:type="url" path="m2s/attachment/file"/>
+                        <item name="url" xsi:type="url" path="m2s/attachment/fileUploader"/>
                     </item>
                 </item>
             </argument>
