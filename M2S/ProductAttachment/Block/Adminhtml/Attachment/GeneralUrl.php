@@ -1,15 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2S\ProductAttachment\Block\Adminhtml\Attachment;
 
 use M2S\ProductAttachment\Model\Item;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
 
 class GeneralUrl
 {
+    /**
+     * @var Registry
+     */
     protected $registry;
 
+    /**
+     * @var UrlInterface
+     */
     protected $urlBuilder;
 
     public function __construct(
@@ -19,14 +28,23 @@ class GeneralUrl
         $this->urlBuilder = $context->getUrlBuilder();
         $this->registry = $registry;
     }
-    public function getId()
+
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         /** @var Item $attachment */
         $attachment = $this->registry->registry('index');
-        return $attachment ? $attachment->getId() : null;
+        return $attachment->getId();
     }
 
-    public function getUrl($route='', $param=[]): string
+    /**
+     * @param string $route
+     * @param array $param
+     * @return string
+     */
+    public function getUrl(string $route = '', array $param = []): string
     {
         return $this->urlBuilder->getUrl($route, $param);
     }

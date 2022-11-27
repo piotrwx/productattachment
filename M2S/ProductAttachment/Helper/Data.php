@@ -1,60 +1,89 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2S\ProductAttachment\Helper;
 
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Url\Helper\Data as UrlHelperData;
+use Magento\Store\Model\ScopeInterface;
 
-class Data extends \Magento\Framework\Url\Helper\Data
+class Data extends UrlHelperData
 {
     const XML_PATH_ENABLED = 'm2s/productattachment/enabled';
     const XML_PATH_ADD_ATTACHMENT_BY_CUSTOMER = 'm2s/productattachment/addbycustomer';
 
-    protected $_product = null;
+    /**
+     * @var mixed|null
+     */
+    protected $product = null;
 
-    protected $_coreRegistry = null;
+    /**
+     * @var Registry|null
+     */
+    protected $coreRegistry = null;
 
-    private $_storeManager;
-
+    /**
+     * @var ScopeConfigInterface
+     */
     private $config;
 
+    /**
+     * @param Context $context
+     * @param ScopeConfigInterface $config
+     * @param Registry $coreRegistry
+     */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        Context $context,
         ScopeConfigInterface $config,
-        \Magento\Framework\Registry $coreRegistry
+        Registry $coreRegistry
     ) {
         $this->config = $config;
-        $this->_coreRegistry = $coreRegistry;
-        $this->_storeManager = $storeManager;
+        $this->coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
 
-    public function getProduct()
+    /**
+     * @return mixed|null
+     */
+    public function getProduct(): mixed
     {
-        if ($this->_product !== null) {
-            return $this->_product;
+        if ($this->product !== null) {
+            return $this->product;
         }
-        return $this->_coreRegistry->registry('product');
+        return $this->coreRegistry->registry('product');
     }
 
-    public function getActionUrl()
+    /**
+     * @return string
+     */
+    public function getActionUrl(): string
     {
         return $this->_getUrl(
             'm2s/add/add',
             [
                 'product_id' => $this->getProduct()->getId(),
-                \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
             ]
         );
     }
 
-    public function isEnabled()
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
     {
-        return $this->config->getValue(self::XML_PATH_ENABLED);
+        return (bool) $this->config->getValue(self::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE);
     }
 
-    public function isEnabledCustomerAttachment()
+    /**
+     * @return bool
+     */
+    public function isEnabledCustomerAttachment(): bool
     {
-        return $this->config->getValue(self::XML_PATH_ADD_ATTACHMENT_BY_CUSTOMER);
+        return (bool) $this->config->getValue(self::XML_PATH_ADD_ATTACHMENT_BY_CUSTOMER, ScopeInterface::SCOPE_STORE);
     }
 }

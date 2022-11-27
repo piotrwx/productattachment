@@ -3,11 +3,12 @@ In feature:
 -fix for edit attachment page(display image)
 -fix for add attachment page(work upload only from "select from gallery")
 
-M2S ProductAttachment ver.1.0.2
+M2S ProductAttachment ver.2.0.0
 
 Version history:
     
-    1.0.2 Trying fix image upload in admin form grid and add delete controller
+    2.0.0 Refactor 27.11.2022
+    1.0.2 Trying fix image upload in admin form grid and add delete controller (latest version 11.03.2021)
     1.0.1 Add configuration for allow customers add own attachments
     1.0.0 Fix for add attachment in admin panel, display images for pdf
     0.0.9 Display accept attachments in product page(frontend)
