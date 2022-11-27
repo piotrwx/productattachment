@@ -1,20 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2S\ProductAttachment\Block;
 
 use M2S\ProductAttachment\Helper\Data;
 use M2S\ProductAttachment\Model\ResourceModel\Item\CollectionFactory;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 
 class Attachments extends Template
 {
+    /**
+     * @var CollectionFactory
+     */
     private $collectionFactory;
 
+    /**
+     * @var Data
+     */
     private $helperData;
 
-    private $_coreRegistry;
+    /**
+     * @var Registry
+     */
+    private $registry;
 
+    /**
+     * @param Context $context
+     * @param CollectionFactory $collectionFactory
+     * @param Data $helperData
+     * @param Registry $registry
+     * @param array $data
+     */
     public function __construct(
         Template\Context $context,
         CollectionFactory $collectionFactory,
@@ -22,45 +42,61 @@ class Attachments extends Template
         Registry $registry,
         array $data = []
     ) {
-        $this->helperData = $helperData;
-        $this->_coreRegistry = $registry;
-        $this->collectionFactory = $collectionFactory;
         parent::__construct($context, $data);
+        $this->collectionFactory = $collectionFactory;
+        $this->helperData = $helperData;
+        $this->registry = $registry;
     }
 
     /**
      * Retrieve product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      */
     public function getProduct()
     {
-        return $this->_coreRegistry->registry('current_product');
+        return $this->registry->registry('current_product');
     }
 
-    public function getItems()
+    /**
+     * @return mixed
+     */
+    public function getItems(): mixed
     {
         $sku = $this->getProduct()->getSku();
         return $this->collectionFactory->create()->addStatusFilter(1)->addProductFilter($sku)->getItems();
     }
 
-    public function getItemByType($item)
+    /**
+     * @param $item
+     * @return mixed
+     */
+    public function getItemByType($item): mixed
     {
         return $item->getAttachmentType();
     }
 
-    public function getAction()
+    /**
+     * @return string
+     */
+    public function getAction(): string
     {
         return $this->helperData->getActionUrl();
     }
 
-    public function isEnabled()
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
     {
-        return $this->helperData->isEnabled();
+        return (bool) $this->helperData->isEnabled();
     }
 
-    public function isEnabledCustomerAttachment()
+    /**
+     * @return bool
+     */
+    public function isEnabledCustomerAttachment(): bool
     {
-        return $this->helperData->isEnabledCustomerAttachment();
+        return (bool) $this->helperData->isEnabledCustomerAttachment();
     }
 }
