@@ -20,9 +20,9 @@ class Save extends Action
     public function execute()
     {
         $request = $this->getRequest()->getPostValue()['general'];
-//
-//                var_dump($this->getRequest()->getPostValue()['general']);
-//        die();
+
+                var_dump($this->getRequest()->getPostValue()['general']);
+        die();
 
         if (!isset($request['id'])) {
             $attachmentArray = $request['attachment_path']['0'];

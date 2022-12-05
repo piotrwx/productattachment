@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
 
 namespace M2S\ProductAttachment\Controller;
 
 
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ActionInterface;
 
-abstract class Add extends Action
+abstract class Add implements ActionInterface
 {
-
 
 }

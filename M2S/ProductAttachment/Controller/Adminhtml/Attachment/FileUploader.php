@@ -2,17 +2,21 @@
 
 namespace M2S\ProductAttachment\Controller\Adminhtml\Attachment;
 
+use Exception;
 use M2S\ProductAttachment\Controller\Add as AddController;
+use M2S\ProductAttachment\Model\ImageUploader;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Framework\Controller\ResultFactory;
 
-class FileUploader extends \Magento\Backend\App\Action
+class FileUploader extends Action
 {
     protected $imageUploader;
 
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \M2S\ProductAttachment\Model\ImageUploader $imageUploader
+        Context $context,
+        ImageUploader $imageUploader
     ) {
         parent::__construct($context);
         $this->imageUploader = $imageUploader;
@@ -32,7 +36,7 @@ class FileUploader extends \Magento\Backend\App\Action
                 'path' => $this->_getSession()->getCookiePath(),
                 'domain' => $this->_getSession()->getCookieDomain(),
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
         return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($result);

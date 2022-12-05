@@ -5,6 +5,7 @@ namespace M2S\ProductAttachment\Controller\Adminhtml\Attachment;
 use M2S\ProductAttachment\Model\Item;
 use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
 class Edit extends Action
@@ -52,7 +53,7 @@ class Edit extends Action
         $this->registry->register('id', $model);
 
         /**
-         * @var \Magento\Framework\View\Result\Page $resultPage
+         * @var Page $resultPage
          */
         $resultPage = $this->pageFactory->create();
 

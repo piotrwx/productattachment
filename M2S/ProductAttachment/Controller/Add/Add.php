@@ -5,25 +5,28 @@ declare(strict_types=1);
 namespace M2S\ProductAttachment\Controller\Add;
 
 use Exception;
-use M2S\ProductAttachment\Controller\Add as AddController;
 use M2S\ProductAttachment\Model\Item;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\Result\Redirect;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\Repository;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Message\Manager;
 
-class Add extends AddController
+class Add implements ActionInterface
 {
     /**
      * @var Repository
      */
-    protected $_assetRepo;
+    protected $assetRepo;
 
     /**
      * @var array
@@ -44,26 +47,44 @@ class Add extends AddController
      * @var StoreManagerInterface
      */
     private $storeManager;
+    private RequestInterface $request;
+    private RedirectFactory $redirectFactory;
+    private Item $item;
+    private Manager $messageMenager;
+    private RedirectInterface $redirect;
+    private File $file;
+    private DirectoryList $dir;
 
     /**
      * @param Repository $assetRepo
-     * @param Context $context
      * @param ProductRepositoryInterface $productRepository
      * @param StoreManagerInterface $storeManager
-     * @param UploaderFactory $_uploaderFactory
+     * @param UploaderFactory $uploaderFactory
      */
     public function __construct(
         Repository $assetRepo,
-        Context $context,
         ProductRepositoryInterface $productRepository,
         StoreManagerInterface $storeManager,
-        UploaderFactory $_uploaderFactory
+        UploaderFactory $uploaderFactory,
+        RequestInterface $request,
+        RedirectFactory $redirectFactory,
+        Item $item,
+        Manager $messageMenager,
+        RedirectInterface $redirect,
+        File $file,
+        DirectoryList $dir,
     ) {
-        $this->_assetRepo = $assetRepo;
+        $this->assetRepo = $assetRepo;
         $this->storeManager = $storeManager;
         $this->productRepository = $productRepository;
-        $this->uploaderFactory = $_uploaderFactory;
-        parent::__construct($context);
+        $this->uploaderFactory = $uploaderFactory;
+        $this->request = $request;
+        $this->redirectFactory = $redirectFactory;
+        $this->item = $item;
+        $this->messageMenager = $messageMenager;
+        $this->redirect = $redirect;
+        $this->file = $file;
+        $this->dir = $dir;
     }
 
     /**
@@ -73,10 +94,9 @@ class Add extends AddController
     public function execute(): Redirect
     {
         $mediaUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
-        $backUrl = $this->getRequest()->getParam(Action::PARAM_NAME_URL_ENCODED);
-        $productId = (int)$this->getRequest()->getParam('product_id');
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $backUrl = $this->request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED);
+        $productId = (int)$this->request->getParam('product_id');
+        $resultRedirect = $this->redirectFactory->create();
         if (!$backUrl || !$productId) {
             $resultRedirect->setPath('/');
             return $resultRedirect;
@@ -88,33 +108,39 @@ class Add extends AddController
             $uploader->setFilenamesCaseSensitivity(false);
             $uploader->setAllowRenameFiles(true);
             $uploader->setAllowedExtensions(['pdf','jpg','png', 'jpeg']);
-            $path='m2s/files';
+            $path = 'm2s/files';
+
+            $images = $this->dir->getPath('media'). '/' .$path;
+            if ( ! file_exists($images)) {
+                $this->file->mkdir($images);
+            }
             $result = $uploader->save('pub/media/' . $path);
+
             $pathToFile = $mediaUrl . $path . '/' . $result['file'];
             $image = $pathToFile;
             if ($result['type'] == 'application/pdf') {
-                $image = $this->_assetRepo->getUrl("M2S_ProductAttachment::images/pdf.png");
+                $image = $this->assetRepo->getUrl("M2S_ProductAttachment::images/pdf.png");
             }
             $product = $this->productRepository->getById($productId);
-            $model = $this->_objectManager->create(Item::class)
+            $model = $this->item
                 ->setProductSku($product->getSku())
                 ->setAttachmentPath($pathToFile)
                 ->setImage($image)
                 ->setAttachmentType($result['type'])
                 ->setFileName($result['name']);
             $model->save();
-            $this->messageManager->addSuccessMessage(__('Your attachment is send to confirm by admin.'));
+            $this->messageMenager->addSuccessMessage(__('Your attachment is send to confirm by admin.'));
         } catch (NoSuchEntityException $noEntityException) {
-            $this->messageManager->addErrorMessage(__('There are not enough parameters.'));
+            $this->messageMenager->addErrorMessage(__('There are not enough parameters.'));
             $resultRedirect->setUrl($backUrl);
             return $resultRedirect;
         } catch (Exception $e) {
-            $this->messageManager->addExceptionMessage(
+            $this->messageMenager->addExceptionMessage(
                 $e,
-                __("File not load, allowed file extension: jpg, pdf, png.")
+                __("File not load, allowed file extension: jpg, jpeg ,pdf, png.")
             );
         }
-        $resultRedirect->setUrl($this->_redirect->getRefererUrl());
+        $resultRedirect->setUrl($this->redirect->getRefererUrl());
         return $resultRedirect;
     }
 }
