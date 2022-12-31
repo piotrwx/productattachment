@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2S\ProductAttachment\Model\ResourceModel\Item\Grid;
 
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;

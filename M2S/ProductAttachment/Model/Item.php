@@ -10,6 +10,6 @@ class Item extends AbstractModel
 {
     protected function _construct()
     {
-        $this->_init(\M2S\ProductAttachment\Model\ResourceModel\Item::class);
+        $this->_init(ResourceModel\Item::class);
     }
 }
